@@ -3,6 +3,7 @@ import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import "pdfjs-dist/build/pdf.worker.entry"; // Load PDF.js worker
 
 const CustomPDFViewer = ({ pdfUrl }) => {
+ 
   const [pdf, setPdf] = useState(null);
   const [pageNum, setPageNum] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
