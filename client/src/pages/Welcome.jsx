@@ -1,29 +1,83 @@
-import { BookOpenIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const FAQItem = ({ question, answer, isOpen, onClick }) => {
+  return (
+    <div className="border-b border-slate-200 last:border-none">
+      <button
+        className="w-full py-6 text-left flex justify-between items-center focus:outline-none"
+        onClick={onClick}
+      >
+        <span className="text-lg font-medium text-slate-900">{question}</span>
+        <svg
+          className={`w-6 h-6 text-slate-500 transform transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-200 ${
+          isOpen ? 'max-h-96 pb-6' : 'max-h-0'
+        }`}
+      >
+        <p className="text-slate-600">{answer}</p>
+      </div>
+    </div>
+  );
+};
 
 const Welcome = () => {
+  const [openFAQ, setOpenFAQ] = useState(null);
+
+  const faqData = [
+    {
+      question: "How does the digital library work?",
+      answer: "Our digital library provides instant access to thousands of books through our web platform. Simply sign up, browse our collection, and start reading on any device. Your progress and bookmarks sync automatically across all your devices."
+    },
+    {
+      question: "What types of books are available?",
+      answer: "We offer a wide range of books including fiction, non-fiction, academic texts, and periodicals. Our collection spans multiple genres and is regularly updated with new releases and classic literature."
+    },
+    {
+      question: "How much does it cost?",
+      answer: "We offer several subscription tiers starting from a free basic plan. Premium plans start at $9.99/month and include additional features like offline reading, advanced note-taking, and access to exclusive content."
+    },
+    {
+      question: "Can I read books offline?",
+      answer: "Yes, with our premium subscription you can download books for offline reading. Simply mark the books you want to read offline, and they'll be available even without an internet connection."
+    },
+    {
+      question: "How do I track my reading progress?",
+      answer: "Our app automatically tracks your reading progress across all books. You can set reading goals, view detailed statistics, and get insights about your reading habits through our intuitive dashboard."
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-emerald-50">
-      {/* Navigation Bar */}
-      <nav className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <BookOpenIcon className="h-8 w-8 text-amber-500" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                BookApp
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex-shrink-0">
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Book Library
               </span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex gap-4">
               <Link
                 to="/login"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-slate-600 hover:text-slate-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
-                Sign in
+                Login
               </Link>
               <Link
                 to="/signup"
-                className="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25"
               >
                 Sign up
               </Link>
@@ -33,179 +87,118 @@ const Welcome = () => {
       </nav>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div className="sm:text-center lg:text-left">
-                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                  <span className="block">Track Your Reading</span>
-                  <span className="block text-amber-500">Journey</span>
-                </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Keep track of the books you've read, discover new ones, and
-                  share your reading experiences with others. Join BookApp today
-                  and start your reading journey!
-                </p>
-                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <div className="rounded-md shadow">
-                    <Link
-                      to="/signup"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-500 hover:bg-emerald-600 md:py-4 md:text-lg md:px-10 transition-colors duration-200"
-                    >
-                      Get Started
-                    </Link>
-                  </div>
-                  <div className="mt-3 sm:mt-0 sm:ml-3">
-                    <Link
-                      to="/login"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-emerald-700 bg-emerald-100 hover:bg-emerald-200 md:py-4 md:text-lg md:px-10 transition-colors duration-200"
-                    >
-                      Sign In
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="py-12 bg-white">
+      <div className="pt-24 pb-8 sm:pt-32 sm:pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-base text-emerald-500 font-semibold tracking-wide uppercase">
-              Features
-            </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Everything you need to track your reading
+          <div className="text-center space-y-8">
+            <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 tracking-tight">
+              Your Personal
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"> Digital Library</span>
+            </h1>
+            <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600">
+              Transform your reading experience with our digital library platform. Access your favorite books anytime, anywhere.
             </p>
-          </div>
-
-          <div className="mt-10">
-            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-              {/* Feature 1 */}
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-sky-500 text-white">
-                  <BookOpenIcon className="h-6 w-6" />
-                </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                  Track Your Books
-                </p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
-                  Keep a record of all the books you've read, are currently
-                  reading, or want to read in the future.
-                </p>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-sky-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                  Reading Notes
-                </p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
-                  Take notes while you read and organize your thoughts about
-                  each book.
-                </p>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-sky-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                  Share with Others
-                </p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
-                  Connect with other readers and share your reading experiences
-                  and recommendations.
-                </p>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="relative">
-                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-sky-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                  Reading Stats
-                </p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
-                  Track your reading progress with detailed statistics and
-                  insights.
-                </p>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/signup"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-500/25"
+              >
+                Get Started
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-all"
+              >
+                Learn More
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-          <div className="flex justify-center space-x-6 md:order-2">
-            <a href="#" className="text-gray-400 hover:text-amber-500">
-              <span className="sr-only">Facebook</span>
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  fillRule="evenodd"
-                  d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                  clipRule="evenodd"
-                />
+      {/* Features Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Feature 1 */}
+          <div className="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all">
+            <div className="h-12 w-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-amber-500">
-              <span className="sr-only">Twitter</span>
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-              </svg>
-            </a>
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">Digital Library</h3>
+            <p className="text-slate-600">Access thousands of books from any device, anytime. Your library is always with you.</p>
           </div>
-          <div className="mt-8 md:mt-0 md:order-1">
-            <p className="text-center text-base text-gray-400">
-              &copy; 2024 BookApp. All rights reserved.
-            </p>
+
+          {/* Feature 2 */}
+          <div className="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all">
+            <div className="h-12 w-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">Track Progress</h3>
+            <p className="text-slate-600">Monitor your reading goals and track your progress with detailed analytics.</p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all">
+            <div className="h-12 w-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">Smart Features</h3>
+            <p className="text-slate-600">Enjoy smart bookmarking, notes, and personalized recommendations.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white mt-16">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-slate-900 mb-2">Frequently Asked Questions</h2>
+          <p className="text-slate-600 text-center mb-12">Everything you need to know about our digital library platform</p>
+          
+          <div className="divide-y divide-slate-200 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            {faqData.map((faq, index) => (
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openFAQ === index}
+                onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+            <div className="flex space-x-6">
+              <a href="#" className="text-slate-500 hover:text-slate-900 transition-colors">
+                Instagram
+              </a>
+              <a href="#" className="text-slate-500 hover:text-slate-900 transition-colors">
+                Twitter
+              </a>
+              <a href="#" className="text-slate-500 hover:text-slate-900 transition-colors">
+                Facebook
+              </a>
+            </div>
+            <div className="flex space-x-8">
+              <Link to="/about" className="text-slate-500 hover:text-slate-900 transition-colors">
+                About
+              </Link>
+              <Link to="/privacy" className="text-slate-500 hover:text-slate-900 transition-colors">
+                Privacy
+              </Link>
+              <Link to="/terms" className="text-slate-500 hover:text-slate-900 transition-colors">
+                Terms
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

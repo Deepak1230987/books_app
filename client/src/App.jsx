@@ -9,7 +9,6 @@ import ExtractText from "./pages/extracttext";
 function App() {
   return (
     <Router>
-      <h1 className="text-4xl font-bold text-center">BookApp</h1>
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

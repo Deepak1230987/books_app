@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 
+export const extractTextFromFile = async (filename) => {
+  try {
+    const response = await fetch(`http://localhost:5000/extract-text/${filename}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error in extracting text:", error);
+    throw error;
+  }
+};
+
 const ExtractText = () => {
   const [filename, setFilename] = useState("");
   const [extractedText, setExtractedText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const extractText = async (filename) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:5000/extract-text/${filename}`);
-      const data = await response.json();
-      setLoading(false);
-
-      if (data) {
-        setExtractedText(data.text || "No text found in the file.");
-      } else {
-        console.error("Error extracting text");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("Error in extracting text:", error);
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (filename) {
-      extractText(filename);
+      try {
+        setLoading(true);
+        const data = await extractTextFromFile(filename);
+        setExtractedText(data.text || "No text found in the file.");
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

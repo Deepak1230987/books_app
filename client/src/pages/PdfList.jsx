@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import extractText from "./extracttext";
+import { extractTextFromFile } from "./extracttext";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import "pdfjs-dist/build/pdf.worker.entry"; // Load PDF.js worker
 
@@ -57,13 +57,18 @@ const PDFList = ({ onSelect }) => {
     setSelectedPdf(pdfName);
     setLoadingSummary(true);
 
-    const data = await extractText(pdfName);
-    if (data && data.summary) {
-      setSummary(data.summary);
-    } else {
+    try {
+      const data = await extractTextFromFile(pdfName);
+      if (data && data.summary) {
+        setSummary(data.summary);
+      } else {
+        setError("Failed to extract text.");
+      }
+    } catch (error) {
       setError("Failed to extract text.");
+    } finally {
+      setLoadingSummary(false);
     }
-    setLoadingSummary(false);
   };
 
   return (
