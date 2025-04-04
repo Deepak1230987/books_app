@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { extractTextFromFile } from "./extracttext";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import "pdfjs-dist/build/pdf.worker.entry"; // Load PDF.js worker
 
@@ -10,6 +9,7 @@ const PDFList = ({ onSelect }) => {
   const [selectedPdf, setSelectedPdf] = useState("");
   const [error, setError] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [loadingAudio, setLoadingAudio] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/files")
@@ -58,9 +58,11 @@ const PDFList = ({ onSelect }) => {
     setLoadingSummary(true);
 
     try {
-      const data = await extractTextFromFile(pdfName);
-      if (data && data.summary) {
-        setSummary(data.summary);
+      const response = await fetch(`http://localhost:5000/extract-text/${pdfName}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setSummary(data.summary || "No summary available.");
       } else {
         setError("Failed to extract text.");
       }
@@ -68,6 +70,28 @@ const PDFList = ({ onSelect }) => {
       setError("Failed to extract text.");
     } finally {
       setLoadingSummary(false);
+    }
+  };
+
+  const handleTextToSpeech = async (pdfName) => {
+    setError(null);
+    setSelectedPdf(pdfName);
+    setLoadingAudio(true);
+
+    try {
+      const response = await fetch(`http://localhost:5000/text-to-speech/${pdfName}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        const audioUrl = `http://localhost:5000/audio/${pdfName}.mp3`;
+        new Audio(audioUrl).play();
+      } else {
+        setError("Failed to generate speech.");
+      }
+    } catch (error) {
+      setError("Failed to generate speech.");
+    } finally {
+      setLoadingAudio(false);
     }
   };
 
@@ -107,6 +131,12 @@ const PDFList = ({ onSelect }) => {
               onClick={() => handleExtractText(pdf.name)}
             >
               Summarize
+            </button>
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+              onClick={() => handleTextToSpeech(pdf.name)}
+            >
+              Play Audio
             </button>
           </div>
         </div>
